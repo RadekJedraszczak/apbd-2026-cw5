@@ -218,3 +218,98 @@ namespace LegacyRenewalApp
         }
     }
 }
+
+public interface IDiscountStrategy
+{
+    decimal CalculateDiscount(decimal totalAmount);
+}
+public interface ILoyaltyEmployeeStrategy : IDiscountStrategy
+{
+    decimal CalculateDiscount(decimal totalAmount, int loyaltyYears);
+}
+
+public interface IGroupDiscount : IDiscountStrategy
+{
+    decimal CalculateDiscount(decimal totalAmount, int teamSize);
+}
+
+public class SilverDiscount : IDiscountStrategy
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return totalAmount * 0.05m;
+    }
+}
+
+public class GoldDiscount : IDiscountStrategy
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return totalAmount * 0.10m;
+    }
+}
+
+public class PlatinumDiscount : IDiscountStrategy
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return totalAmount * 0.15m;
+    }
+}
+
+public class EducationDiscount : IDiscountStrategy
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return totalAmount * 0.20m;
+    }
+}
+public class LoyaltyEmployeeDiscount : ILoyaltyEmployeeStrategy
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return  totalAmount;
+    }
+    public decimal CalculateDiscount(decimal totalAmount, int loyaltyYears)
+    {
+        decimal result = 0;
+        if (loyaltyYears >= 5)
+        {
+            result = totalAmount * 0.07m;
+        }
+        else if (loyaltyYears >= 2)
+        {
+             result = totalAmount * 0.03m;
+        }
+        return result;
+    }
+}
+
+public class GroupDiscount : IGroupDiscount
+{
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return totalAmount;
+    }
+    public decimal CalculateDiscount(decimal totalAmount, int teamSize)
+    {
+        
+    }
+}
+public class DiscountCalculator
+{
+    private readonly IDiscountStrategy _strategy;
+
+    public DiscountCalculator(IDiscountStrategy strategy)
+    {
+        _strategy = strategy;
+    }
+
+    public decimal CalculateDiscount(decimal totalAmount)
+    {
+        return _strategy.CalculateDiscount(totalAmount);
+    }
+}
+
+
+

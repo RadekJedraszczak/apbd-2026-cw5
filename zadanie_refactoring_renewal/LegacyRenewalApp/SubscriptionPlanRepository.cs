@@ -17,7 +17,7 @@ namespace LegacyRenewalApp
         {
             int randomWaitTime = new Random().Next(500);
             Thread.Sleep(randomWaitTime);
-
+            
             string normalizedCode = code.ToUpperInvariant();
             if (Database.ContainsKey(normalizedCode))
             {
